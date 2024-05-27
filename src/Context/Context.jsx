@@ -1,14 +1,23 @@
-import React, { createContext } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 export const UserContext = createContext()
 export default function Context({children}) {
     
-    let a=20;
-    const data =[
-        {id:0,name:'Dipanshu', Age:25, City:'Delhi'},
-        {id:1,name:'Shanaya', Age:22, City:'Mumbai'},
-        {id:2,name:'Atul', Age:23, City:'Pune'}
-    ]
     
-    return <UserContext.Provider value={{data}}> {children} </UserContext.Provider>
+    const [data,setData] =useState(null);
+
+    let getData=()=>{
+        let url='https://jsonplaceholder.typicode.com/users'
+        fetch(url)
+        .then(res=>res.json())
+        .then(data=>setData(data))
+        
+    }
+
+    useEffect(()=>{
+        getData();
+    },[])
+    
+    
+    return <UserContext.Provider value={{data,setData}}> {children} </UserContext.Provider>
  
 }
